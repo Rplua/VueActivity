@@ -19,14 +19,18 @@
         </form>
     </div>
 </template>
-
 <script>
 import { reactive } from 'vue'
 
 export default {
     name: 'AddContact',
-    emits: ['add-contact'],
-    setup(_, { emit }) {
+    props: {
+        onAddContact: { // CORRECTO
+            type: Function,
+            required: true
+        }
+    },
+    setup(props) {
         const contact = reactive({
             name: "",
             phone: "",
@@ -34,7 +38,7 @@ export default {
         })
 
         const addContact = () => {
-            emit("add-contact", { ...contact })
+            props.onAddContact({ ...contact })
             contact.name = ""
             contact.phone = ""
             contact.email = ""

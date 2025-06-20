@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, inject } from "vue";
 
 export default {
     name: "LuckyNumber",
@@ -26,14 +26,16 @@ export default {
     },
     setup(props) {
         const luckyNumber = ref(0);
-
+        
+        const maxNumber = inject("maxLuckyNumber")
         const generateRandomNumber = () => {
-            luckyNumber.value = Math.floor(Math.random() * props.maxNumber) + 1;
+            luckyNumber.value = Math.floor(Math.random() * maxNumber.value) + 1;
         };
 
         return {
             luckyNumber,
             generateRandomNumber,
+            maxNumber
         };
     },
 };

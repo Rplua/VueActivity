@@ -1,37 +1,61 @@
 <template>
-  <div class="bg-black text pt-3" :style="{ height: '100hv' }">
+  <div class="bg-gradient bg-dark text-light min-vh-100 py-5">
     <div class="container">
-      <div class="row text-white p-2 mb-2">
-        <div class="col-6">
-          Contact Owner Name: <input v-model="contactOwner">
+      <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-info">📇 Contact Manager</h1>
+        <p class="lead text-secondary">Organiza tus contactos y genera números de la suerte</p>
+      </div>
+      <div class="card bg-secondary bg-opacity-25 shadow-sm mb-5">
+        <div class="card-body row gy-3">
+          <div class="col-md-6">
+            <label class="form-label text-white-50 fw-semibold">Contact Owner Name</label>
+            <input
+              v-model="contactOwner"
+              type="text"
+              class="form-control bg-light text-dark border-0 shadow-sm"
+              placeholder="e.g. Randy"
+            />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-white-50 fw-semibold">Max Lucky Number</label>
+            <input
+              v-model="maxNumber"
+              type="number"
+              class="form-control bg-light text-dark border-0 shadow-sm"
+              placeholder="e.g. 100"
+            />
+          </div>
         </div>
-        <div class="col-6 text-end">
-          Max Lucky Number : <input v-model="maxNumber">
-        </div>
+      </div>
+      <div class="mb-5">
+        <AddContact :onAddContact="onAddContact" />
       </div>
       <div>
-        <div class="text-white float-end">
-
-        </div>
-      </div>
-      <br>
-      <AddContact @add-contact="onAddContact"></AddContact>
-      <div class="row">
-        <div class="col-12" v-for="contact in contacts" :key="contact.name">
-          <Contact :name="contact.name" :phone="contact.phone" :ownerName="contact.ownerName" :email="contact.email"
-            :isFavorite="contact.isFavorite" @update-favorite="contact.isFavorite = onUpdateFavorite($event)"
-            :maxLuckyNumber="maxNumber" />
+        <h3 class="text-center text-info mb-4">👥 Lista de Contactos</h3>
+        <div class="row g-4">
+          <div
+            class="col-12 col-sm-6 col-lg-4"
+            v-for="contact in contacts"
+            :key="contact.name"
+          >
+            <Contact
+              :name="contact.name"
+              :phone="contact.phone"
+              :ownerName="contact.ownerName"
+              :email="contact.email"
+              :isFavorite="contact.isFavorite"
+              @update-favorite="contact.isFavorite = onUpdateFavorite($event)"
+            />
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script>
 import Contact from './components/Contact.vue'
-import { ref } from 'vue'
+import { ref, provide } from 'vue'
 import AddContact from './components/AddContact.vue'
-
 
 export default {
   components: {
@@ -40,7 +64,9 @@ export default {
   },
   setup() {
     const contactOwner = ref("Randy")
-    const maxNumber = ref(100);
+    const maxNumber = ref(10230)
+    provide("maxLuckyNumber", maxNumber)
+
     const contacts = ref([
       {
         name: 'Alice Johnson',
